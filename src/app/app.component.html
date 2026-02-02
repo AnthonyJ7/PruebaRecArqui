@@ -1,0 +1,37 @@
+<div class="app">
+  <header class="app-header">
+    <div class="brand">
+      <span class="logo">CL</span>
+      <div>
+        <h1>CarnavalLogistics</h1>
+        <p>Centro de control municipal para aforo y permisos comerciales.</p>
+      </div>
+    </div>
+    <nav>
+      <a routerLink="/aforo" routerLinkActive="active">Aforo</a>
+      <a routerLink="/permisos" routerLinkActive="active">Permisos</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h2>Operación del Carnaval en tiempo real</h2>
+      <p>
+        Supervisa la ocupación de plazas públicas y administra permisos
+        comerciales con flujos separados, consistentes y auditables.
+      </p>
+    </div>
+    <div class="hero-card">
+      <h3>Estado general</h3>
+      <ul>
+        <li>Monitoreo de capacidad por plaza</li>
+        <li>Emisión de permisos temporales</li>
+        <li>Alertas visuales de saturación</li>
+      </ul>
+    </div>
+  </section>
+
+  <main>
+    <router-outlet />
+  </main>
+</div>

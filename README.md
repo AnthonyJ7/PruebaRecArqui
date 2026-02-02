@@ -1,20 +1,71 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# CarnavalLogistics
 
-# Run and deploy your AI Studio app
+Plataforma municipal para coordinar la logística de plazas públicas durante festividades. El sistema gestiona aforo (capacidad de personas en recintos) y permisos comerciales para puestos temporales de forma independiente.
 
-This contains everything you need to run your app locally.
+## Arquitectura en capas
 
-View your app in AI Studio: https://ai.studio/apps/drive/1AFsPyx_VU0FHa3ki8gENlpz8ddet9sPf
+La solución separa responsabilidades por capas y por dominio funcional. Cada módulo (Aforo y Permisos Comerciales) es autónomo y mantiene su propio flujo de datos.
 
-## Run Locally
+### Diagrama de componentes (bloques)
 
-**Prerequisites:**  Node.js
+```
+┌───────────────────────────────────────────────┐
+│ Presentación (UI)                             │
+│ - AforoComponent                              │
+│ - PermisosComponent                           │
+└───────────────▲───────────────────────────────┘
+				│
+┌───────────────┴───────────────────────────────┐
+│ Aplicación / Casos de uso                     │
+│ - AforoService                                │
+│ - PermisosService                             │
+└───────────────▲───────────────────────────────┘
+				│
+┌───────────────┴───────────────────────────────┐
+│ Dominio (Modelos compartidos)                 │
+│ - AforoRecord                                 │
+│ - PermisoComercial                            │
+└───────────────▲───────────────────────────────┘
+				│
+┌───────────────┴───────────────────────────────┐
+│ Infraestructura / Persistencia                │
+│ - AforoRepository (in-memory)                 │
+│ - PermisosRepository (in-memory)              │
+└───────────────────────────────────────────────┘
+```
 
+### Responsabilidades y persistencia
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- **Presentación**: componentes que muestran formularios y listados. No contienen lógica de negocio.
+- **Aplicación**: servicios que orquestan reglas, validaciones y operaciones.
+- **Dominio**: modelos compartidos que definen la estructura de datos.
+- **Infraestructura**: repositorios por módulo. La persistencia actual es en memoria, lo que permite reemplazarla por APIs o bases de datos sin afectar las capas superiores.
+
+### Justificación (Mantenibilidad)
+
+- **Bajo acoplamiento**: cada módulo tiene su propio repositorio y servicio. Cambios en Aforo no impactan Permisos y viceversa.
+- **Alta cohesión**: cada carpeta agrupa responsabilidades relacionadas.
+- **Sustitución de persistencia**: la capa de infraestructura puede cambiar (por ejemplo, a una API REST) sin alterar componentes ni servicios.
+- **Escalabilidad**: nuevos módulos pueden seguir el mismo patrón sin tocar los existentes.
+
+## Estructura principal
+
+- Aforo: [src/app/features/aforo](src/app/features/aforo)
+- Permisos: [src/app/features/permisos](src/app/features/permisos)
+- Modelos compartidos: [src/app/shared/models](src/app/shared/models)
+
+## CI/CD con GitHub Actions
+
+Se incluye un pipeline básico en .github/workflows/ci-cd.yml con los siguientes pasos:
+
+1. **Checkout**: clona el repositorio en el runner.
+2. **Setup Node**: configura Node.js y cachea dependencias.
+3. **Install**: instala dependencias con npm ci.
+4. **Test**: ejecuta pruebas unitarias en modo CI.
+5. **Build**: compila el proyecto para producción.
+
+### Ejecución local
+
+- Desarrollo: `npm start`
+- Pruebas: `npm test`
+- Build: `npm run build`

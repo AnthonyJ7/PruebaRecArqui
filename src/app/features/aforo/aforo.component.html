@@ -1,0 +1,77 @@
+<section class="feature">
+  <header>
+    <h2>Gestión de Aforo</h2>
+    <p>Controla la capacidad de las plazas y monitorea la ocupación actual.</p>
+  </header>
+
+  <div class="summary">
+    <div class="summary-card">
+      <span>Plazas monitoreadas</span>
+      <strong>{{ totalPlazas }}</strong>
+    </div>
+    <div class="summary-card">
+      <span>Capacidad total</span>
+      <strong>{{ totalCapacidad }} personas</strong>
+    </div>
+    <div class="summary-card">
+      <span>Ocupación actual</span>
+      <strong>{{ totalOcupacion }} personas</strong>
+    </div>
+    <div class="summary-card highlight">
+      <span>Uso global</span>
+      <strong>{{ porcentajeGlobal }}%</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Registrar aforo</h3>
+    <form (ngSubmit)="addRecord()" class="grid">
+      <label>
+        Código
+        <input [(ngModel)]="nuevo.id" name="id" placeholder="AF-003" required />
+      </label>
+      <label>
+        Plaza
+        <input [(ngModel)]="nuevo.plaza" name="plaza" placeholder="Plaza Sur" required />
+      </label>
+      <label>
+        Capacidad
+        <input type="number" [(ngModel)]="nuevo.capacidad" name="capacidad" min="1" required />
+      </label>
+      <label>
+        Ocupación inicial
+        <input type="number" [(ngModel)]="nuevo.ocupacionActual" name="ocupacion" min="0" />
+      </label>
+      <button type="submit">Agregar</button>
+    </form>
+  </div>
+
+  <div class="list">
+    <article *ngFor="let record of records" class="card">
+      <div class="card-header">
+        <div>
+          <h3>{{ record.plaza }}</h3>
+          <span class="code">{{ record.id }}</span>
+        </div>
+        <span class="status">{{ occupancyStatus(record) }}</span>
+      </div>
+      <div class="metric">
+        <div>
+          <p>Capacidad: {{ record.capacidad }} personas</p>
+          <p>Ocupación: {{ record.ocupacionActual }} personas</p>
+        </div>
+        <div class="progress">
+          <div
+            class="progress-bar"
+            [style.width.%]="(record.ocupacionActual / record.capacidad) * 100"
+          ></div>
+        </div>
+      </div>
+      <p>Actualizado: {{ record.actualizadoEn | date: 'short' }}</p>
+      <div class="actions">
+        <button type="button" (click)="decrease(record)">-</button>
+        <button type="button" (click)="increase(record)">+</button>
+      </div>
+    </article>
+  </div>
+</section>

@@ -1,0 +1,72 @@
+<section class="feature">
+  <header>
+    <h2>Permisos Comerciales</h2>
+    <p>Gestiona permisos temporales para puestos de comercio en plazas públicas.</p>
+  </header>
+
+  <div class="summary">
+    <div class="summary-card">
+      <span>Permisos emitidos</span>
+      <strong>{{ totalPermisos }}</strong>
+    </div>
+    <div class="summary-card">
+      <span>Permisos vigentes</span>
+      <strong>{{ permisosVigentes }}</strong>
+    </div>
+    <div class="summary-card">
+      <span>Permisos suspendidos</span>
+      <strong>{{ permisosSuspendidos }}</strong>
+    </div>
+    <div class="summary-card highlight">
+      <span>Última actualización</span>
+      <strong>{{ permisos[0]?.fechaEmision | date: 'short' }}</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Emitir permiso</h3>
+    <form (ngSubmit)="addPermiso()" class="grid">
+      <label>
+        Código
+        <input [(ngModel)]="nuevo.id" name="id" placeholder="PC-103" required />
+      </label>
+      <label>
+        Comerciante
+        <input [(ngModel)]="nuevo.comerciante" name="comerciante" placeholder="Nombre" required />
+      </label>
+      <label>
+        Rubro
+        <input [(ngModel)]="nuevo.rubro" name="rubro" placeholder="Gastronomía" required />
+      </label>
+      <label>
+        Ubicación
+        <input [(ngModel)]="nuevo.ubicacion" name="ubicacion" placeholder="Plaza Sur" />
+      </label>
+      <label class="toggle">
+        Vigente
+        <input type="checkbox" [(ngModel)]="nuevo.vigente" name="vigente" />
+      </label>
+      <button type="submit">Registrar</button>
+    </form>
+  </div>
+
+  <div class="list">
+    <article *ngFor="let permiso of permisos" class="card">
+      <div class="card-header">
+        <div>
+          <h3>{{ permiso.comerciante }}</h3>
+          <span class="code">{{ permiso.id }}</span>
+        </div>
+        <span class="badge" [class.off]="!permiso.vigente">
+          {{ permiso.vigente ? 'Vigente' : 'Suspendido' }}
+        </span>
+      </div>
+      <p>Rubro: {{ permiso.rubro }}</p>
+      <p>Ubicación: {{ permiso.ubicacion || 'Por asignar' }}</p>
+      <p>Emisión: {{ permiso.fechaEmision | date: 'short' }}</p>
+      <button type="button" (click)="togglePermiso(permiso)">
+        {{ permiso.vigente ? 'Suspender' : 'Reactivar' }}
+      </button>
+    </article>
+  </div>
+</section>
