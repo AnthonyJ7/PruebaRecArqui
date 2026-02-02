@@ -9,6 +9,7 @@ export class AforoRepository {
       ocupacionActual: 250,
       actualizadoEn: new Date().toISOString()
     },
+    
     {
       id: 'AF-002',
       plaza: 'Plaza Norte',
