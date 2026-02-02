@@ -6,6 +6,7 @@ Plataforma municipal para coordinar la logística de plazas públicas durante fe
 
 La solución separa responsabilidades por capas y por dominio funcional. Cada módulo (Aforo y Permisos Comerciales) es autónomo y mantiene su propio flujo de datos.
 
+
 ### Diagrama de componentes (bloques)
 
 ```
